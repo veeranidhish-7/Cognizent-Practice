@@ -28,3 +28,12 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# IDE Files
+.idea/
+*.iml
+
+
+
+# Compiled Code
+target/
