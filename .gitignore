@@ -1,0 +1,11 @@
+# Ignore IntelliJ configuration folders in any sub-project
+**/.idea/
+**/*.iml
+
+# Ignore compiled Java output folders in any sub-project
+**/out/
+**/target/
+**/*.class
+
+# Ignore OS specific files
+.DS_Store
