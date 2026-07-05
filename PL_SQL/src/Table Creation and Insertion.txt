@@ -1,0 +1,88 @@
+DROP DATABASE IF EXISTS PLSQL_Exercises;
+
+CREATE DATABASE PLSQL_Exercises;
+
+USE PLSQL_Exercises;
+
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    DOB DATE,
+    Balance DECIMAL(12,2),
+    IsVIP BOOLEAN DEFAULT FALSE,
+    LastModified DATETIME
+);
+
+CREATE TABLE Accounts (
+    AccountID INT PRIMARY KEY,
+    CustomerID INT,
+    AccountType VARCHAR(20),
+    Balance DECIMAL(12,2),
+    LastModified DATETIME,
+    FOREIGN KEY(CustomerID)
+    REFERENCES Customers(CustomerID)
+);
+
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY,
+    AccountID INT,
+    TransactionDate DATE,
+    Amount DECIMAL(12,2),
+    TransactionType VARCHAR(20),
+    FOREIGN KEY(AccountID)
+    REFERENCES Accounts(AccountID)
+);
+
+CREATE TABLE Loans (
+    LoanID INT PRIMARY KEY,
+    CustomerID INT,
+    LoanAmount DECIMAL(12,2),
+    InterestRate DECIMAL(5,2),
+    StartDate DATE,
+    EndDate DATE,
+    FOREIGN KEY(CustomerID)
+    REFERENCES Customers(CustomerID)
+);
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Position VARCHAR(50),
+    Salary DECIMAL(12,2),
+    Department VARCHAR(50),
+    HireDate DATE
+);
+
+INSERT INTO Customers VALUES
+(1,'John Doe','1955-05-15',12000,FALSE,NOW()),
+(2,'Jane Smith','1992-07-20',8500,FALSE,NOW()),
+(3,'Robert King','1960-09-18',15000,FALSE,NOW()),
+(4,'Emma Watson','1988-01-12',5000,FALSE,NOW()),
+(5,'David Miller','1948-11-30',25000,FALSE,NOW());
+
+INSERT INTO Accounts VALUES
+(101,1,'Savings',12000,NOW()),
+(102,2,'Checking',8500,NOW()),
+(103,3,'Savings',15000,NOW()),
+(104,4,'Savings',5000,NOW()),
+(105,5,'Savings',25000,NOW());
+
+INSERT INTO Transactions VALUES
+(1,101,CURDATE(),500,'Deposit'),
+(2,102,CURDATE(),300,'Withdrawal'),
+(3,103,CURDATE(),1200,'Deposit'),
+(4,104,CURDATE(),700,'Withdrawal');
+
+INSERT INTO Loans VALUES
+(1,1,500000,8.5,CURDATE(),DATE_ADD(CURDATE(),INTERVAL 20 DAY)),
+(2,2,300000,9.0,CURDATE(),DATE_ADD(CURDATE(),INTERVAL 50 DAY)),
+(3,3,700000,8.0,CURDATE(),DATE_ADD(CURDATE(),INTERVAL 15 DAY)),
+(4,5,250000,7.5,CURDATE(),DATE_ADD(CURDATE(),INTERVAL 10 DAY));
+
+INSERT INTO Employees VALUES
+(1,'Alice Johnson','Manager',70000,'HR','2015-06-15'),
+(2,'Bob Brown','Developer',60000,'IT','2017-03-20'),
+(3,'Chris Lee','Analyst',55000,'Finance','2019-08-10');
+
+SET SQL_SAFE_UPDATES = 0;
+

@@ -1,0 +1,50 @@
+
+
+DELIMITER $$
+
+CREATE PROCEDURE ProcessMonthlyInterest()
+BEGIN
+    UPDATE Accounts
+    SET Balance = Balance + (Balance * 0.01)
+    WHERE AccountType='Savings';
+END $$
+
+DELIMITER ;
+
+CALL ProcessMonthlyInterest();
+
+DELIMITER $$
+
+CREATE PROCEDURE TransferFunds(
+    IN fromAcc INT,
+    IN toAcc INT,
+    IN amount DECIMAL(12,2)
+)
+BEGIN
+    DECLARE balance DECIMAL(12,2);
+
+    SELECT Balance
+    INTO balance
+    FROM Accounts
+    WHERE AccountID=fromAcc;
+
+    IF balance >= amount THEN
+
+        UPDATE Accounts
+        SET Balance=Balance-amount
+        WHERE AccountID=fromAcc;
+
+        UPDATE Accounts
+        SET Balance=Balance+amount
+        WHERE AccountID=toAcc;
+
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT='Insufficient Balance';
+    END IF;
+
+END $$
+
+DELIMITER ;
+
+CALL TransferFunds(101,103,1000);

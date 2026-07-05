@@ -1,0 +1,65 @@
+DELIMITER $$
+
+CREATE PROCEDURE Exercise1_Scenario1()
+BEGIN
+    UPDATE Loans
+    SET InterestRate = InterestRate - 1
+    WHERE CustomerID IN
+    (
+        SELECT CustomerID
+        FROM Customers
+        WHERE TIMESTAMPDIFF(YEAR,DOB,CURDATE()) > 60
+    );
+END $$
+
+DELIMITER ;
+
+CALL Exercise1_Scenario1();
+
+DELIMITER $$
+
+CREATE PROCEDURE Exercise1_Scenario2()
+BEGIN
+    UPDATE Customers
+    SET IsVIP = TRUE
+    WHERE Balance > 10000;
+END $$
+
+DELIMITER ;
+
+CALL Exercise1_Scenario2();
+
+DELIMITER $$
+
+CREATE PROCEDURE Exercise1_Scenario3()
+BEGIN
+    SELECT
+        c.Name,
+        l.LoanID,
+        l.EndDate,
+        CONCAT('Reminder: Loan ',l.LoanID,' is due on ',l.EndDate) AS Message
+    FROM Customers c
+    JOIN Loans l
+    ON c.CustomerID=l.CustomerID
+    WHERE l.EndDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(),INTERVAL 30 DAY);
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE UpdateEmployeeBonus(
+    IN dept VARCHAR(50),
+    IN bonusPercent DECIMAL(5,2)
+)
+BEGIN
+    UPDATE Employees
+    SET Salary = Salary + (Salary * bonusPercent / 100)
+    WHERE Department = dept;
+END $$
+
+DELIMITER ;
+
+CALL UpdateEmployeeBonus('IT',10);
+
+CALL Exercise1_Scenario3();
