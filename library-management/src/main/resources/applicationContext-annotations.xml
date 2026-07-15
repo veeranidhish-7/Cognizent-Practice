@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Exercise 6: Configuring Beans with Annotations -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+        No explicit <bean> tags here: component-scan finds BookRepository
+        (@Repository) and BookService (@Service) automatically, and the
+        @Autowired setter on BookService wires them together.
+    -->
+    <context:component-scan base-package="com.library.service, com.library.repository"/>
+
+</beans>
